@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mathieu Huet - Animation Technical Director</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #1a1a1a;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: #000;
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            color: #00d4ff;
+        }
+
+        .hero h2 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: #ccc;
+        }
+
+        .hero p {
+            font-size: 1rem;
+            opacity: 0.8;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .projects {
+            padding: 4rem 0;
+            background: #1a1a1a;
+        }
+
+        .projects h2 {
+            text-align: center;
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 3rem;
+        }
+
+        .project-card {
+            background: #2a2a2a;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            border: 2px solid #333;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            border-color: #00d4ff;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 2px solid #333;
+        }
+
+        .video-placeholder {
+            color: #00d4ff;
+            text-align: center;
+            font-size: 1.2rem;
+            padding: 2rem;
+        }
+
+        .video-placeholder h4 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+        }
+
+        .video-placeholder p {
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .project-info {
+            padding: 2rem;
+            color: white;
+        }
+
+        .project-info h3 {
+            font-size: 1.6rem;
+            margin-bottom: 0.5rem;
+            color: #00d4ff;
+        }
+
+        .project-role {
+            color: #ff6b6b;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .project-period {
+            color: #888;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }
+
+        .project-description {
+            line-height: 1.6;
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+
+        .contact-bar {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 1.5rem 0;
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .contact-item {
+            color: #00d4ff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .contact-item:hover {
+            color: #ff6b6b;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .project-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .project-grid {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            }
+            
+            .contact-info {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .video-container {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="hero">
+                <h1>Mathieu Huet</h1>
+                <h2>Animation Technical Director</h2>
+                <p>26 years of AAA game development experience. Master of Unreal Engine and animation systems.</p>
+            </div>
+        </div>
+    </header>
+
+    <section class="projects">
+        <div class="container">
+            <h2>Projects & Work</h2>
+            <div class="project-grid">
+                
+                <div class="project-card">
+                    <div class="video-container">
+                        <div class="video-placeholder">
+                            <h4>Current Project</h4>
+                            <p>Open world action adventure gameplay and systems</p>
+                            <p><em>Add gameplay trailer or development footage</em></p>
+                        </div>
+                    </div>
+                    <div class="project-info">
+                        <h3>Open World Action Adventure</h3>
+                        <div class="project-role">Principal Technical Animator</div>
+                        <div class="project-period">2023 - Present • Bad Brain Games</div>
+                        <div class="project-description">
+                            Leading animation systems: rigging, motion matching, Unreal animation framework, Metahumans integration.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="video-container">
+                        <div class="video-placeholder">
+                            <h4>Watch Dogs 2</h4>
+                            <p>Living City emergent system showcase</p>
+                            <p><em>Add official trailer or gameplay footage</em></p>
+                        </div>
+                    </div>
+                    <div class="project-info">
+                        <h3>Watch Dogs 2</h3>
+                        <div class="project-role">Animation Technical Director</div>
+                        <div class="project-period">2014 - 2017 • Ubisoft</div>
+                        <div class="project-description">
+                            Directed the Living City emergent system that brought San Francisco to life with dynamic character behaviors.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="video-container">
+                        <div class="video-placeholder">
+                            <h4>Bionik IK System</h4>
+                            <p>Multi-platform full-body inverse kinematics</p>
+                            <p><em>Add technical demonstration or presentation footage</em></p>
+                        </div>
+                    </div>
+                    <div class="project-info">
+                        <h3>Bionik - IK System</h3>
+                        <div class="project-role">Technical Director</div>
+                        <div class="project-period">2021 - 2023 • Ubisoft</div>
+                        <div class="project-description">
+                            Revolutionary full-body IK system now used across most Ubisoft projects. Presented at UDC 2021 & 2022.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="video-container">
+                        <div class="video-placeholder">
+                            <h4>Watch Dogs</h4>
+                            <p>Original groundbreaking hacking adventure</p>
+                            <p><em>Add official trailer or development showcase</em></p>
+                        </div>
+                    </div>
+                    <div class="project-info">
+                        <h3>Watch Dogs</h3>
+                        <div class="project-role">Animation Technical Director</div>
+                        <div class="project-period">2008 - 2014 • Ubisoft</div>
+                        <div class="project-description">
+                            Established technical animation foundation for this groundbreaking open-world title.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="video-container">
+                        <div class="video-placeholder">
+                            <h4>Far Cry 2</h4>
+                            <p>African savanna animation systems</p>
+                            <p><em>Add gameplay or behind-the-scenes footage</em></p>
+                        </div>
+                    </div>
+                    <div class="project-info">
+                        <h3>Far Cry 2</h3>
+                        <div class="project-role">Animation Technical Director</div>
+                        <div class="project-period">2006 - 2008 • Ubisoft</div>
+                        <div class="project-description">
+                            Advanced character animation systems for harsh African environment gameplay.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="video-container">
+                        <div class="video-placeholder">
+                            <h4>Dissect Tool</h4>
+                            <p>Recording and debugging system</p>
+                            <p><em>Add technical demonstration or UDC presentation</em></p>
+                        </div>
+                    </div>
+                    <div class="project-info">
+                        <h3>Dissect - Debug Tool</h3>
+                        <div class="project-role">Technical Director</div>
+                        <div class="project-period">Pipeline Tool • Ubisoft</div>
+                        <div class="project-description">
+                            Recording/debugging tool used across all Ubisoft pipelines. Presented at UDC 2018 & 2015.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <div class="contact-bar">
+        <div class="container">
+            <div class="contact-info">
+                <a href="mailto:0mathieuhuet@gmail.com" class="contact-item">0mathieuhuet@gmail.com</a>
+                <a href="tel:+15149675099" class="contact-item">+1(514)967-5099</a>
+                <a href="#" class="contact-item">LinkedIn Profile</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple hover animations
+        document.querySelectorAll('.project-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body>
+</html>
