@@ -169,6 +169,37 @@
             color: #ff6b6b;
         }
 
+        .video-timestamps {
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+        }
+
+        .video-timestamps ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .video-timestamps a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 0.9rem;
+            padding: 4px 8px;
+            border-radius: 4px;
+            background: rgba(0, 212, 255, 0.2);
+            transition: background 0.3s ease;
+        }
+
+        .video-timestamps a:hover {
+            background: rgba(0, 212, 255, 0.4);
+        }
+
         @media (max-width: 768px) {
             .hero h1 {
                 font-size: 2rem;
@@ -283,14 +314,24 @@
 
                 <div class="project-card">
                     <div class="video-container">
-                        <h4>Far Cry 2</h4>
-                          <div class="video-timestamps">
+                        <iframe width="560" height="315" 
+                            src="https://www.youtube.com/embed/FCeEvQ68jY8?enablejsapi=1" 
+                            title="YouTube video player" 
+                            frameborder="0" 
+                            id="farCry2Video"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                            allowfullscreen>
+                        </iframe>
+                        <div class="video-timestamps">
                             <h5>Key Animation Features:</h5>
                             <ul>
-                                <li><a href="#" onclick="seekTo(120)">2:00 - Environmental traversal systems</a></li>
-                                <li><a href="#" onclick="seekTo(245)">4:05 - Combat animation blending</a></li>
-                                <li><a href="#" onclick="seekTo(380)">6:20 - Vehicle-character transitions</a></li>
-                                <li><a href="#" onclick="seekTo(520)">8:40 - Weather response animations</a></li>
+                                <li><a href="#" data-time="0">Intro</a></li>
+                                <li><a href="#" data-time="18">FPS Animations</a></li>
+                                <li><a href="#" data-time="52">Weapon Jamming</a></li>
+                                <li><a href="#" data-time="108">Deterioration</a></li>
+                                <li><a href="#" data-time="145">Health System</a></li>
+                                <li><a href="#" data-time="180">Vehicle Damage</a></li>
+                                <li><a href="#" data-time="240">Fire System</a></li>
                             </ul>
                         </div>
                     </div>
@@ -311,6 +352,26 @@
                             <p>Recording and debugging system</p>
                             <p><em>Add technical demonstration or UDC presentation</em></p>
                         </div>
+                    </div>
+                    <div class="project-info">
+                        <h3>Dissect - Debug Tool</h3>
+                        <div class="project-role">Technical Director</div>
+                        <div class="project-period">Pipeline Tool • Ubisoft</div>
+                        <div class="project-description">
+                            Recording/debugging tool used across all Ubisoft pipelines. Presented at UDC 2018 & 2015.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="video-container">
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/FCeEvQ68jY8?si=u2qb6q_4w4LzsdyK" 
+                            title="YouTube video player" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                            referrerpolicy="strict-origin-when-cross-origin" 
+                            allowfullscreen>
+                        </iframe>
                     </div>
                     <div class="project-info">
                         <h3>Dissect - Debug Tool</h3>
@@ -347,6 +408,45 @@
                 this.style.transform = 'translateY(0)';
             });
         });
+
+        // YouTube video timestamp seeking
+        document.querySelectorAll('.video-timestamps a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const time = this.getAttribute('data-time');
+                const video = document.getElementById('farCry2Video');
+                if (video) {
+                    video.contentWindow.postMessage('{"event":"command","func":"seekTo","args":[' + time + ',true]}', '*');
+                }
+            });
+        });
+    </script>
+    <script>
+        // Load YouTube API
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        var player;
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('farCry2Video', {
+                events: {
+                    'onReady': onPlayerReady
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            // Add click handlers to timestamp links
+            document.querySelectorAll('.video-timestamps a').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const time = parseInt(e.target.dataset.time);
+                    player.seekTo(time);
+                });
+            });
+        }
     </script>
 </body>
 </html>
