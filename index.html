@@ -4,7 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mathieu Huet - Animation Technical Director</title>
+    <!-- Add this line before your existing styles -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+    --primary: #00d4ff;
+    --text-primary: #ffffff;
+    --text-secondary: #a0a0a0;
+}
+
         * {
             margin: 0;
             padding: 0;
@@ -12,11 +20,50 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', sans-serif;
             line-height: 1.6;
             color: #333;
-            background: #1a1a1a;
+            min-height: 100vh;
+            position: relative;
+            background: #151515;
+            overflow-x: hidden;
         }
+
+        body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 20% 20%, #383838 0%, transparent 40%),
+        radial-gradient(circle at 80% 20%, #303030 0%, transparent 35%),
+        radial-gradient(circle at 50% 50%, #353535 0%, transparent 45%),
+        radial-gradient(circle at 80% 80%, #333333 0%, transparent 40%),
+        radial-gradient(circle at 20% 80%, #2a2a2a 0%, transparent 35%);
+    background-size: 150% 150%;
+    z-index: -1;
+    animation: movingCircles 20s ease-in-out infinite;
+}
+
+@keyframes movingCircles {
+    0% {
+        background-position: 0% 0%, 100% 0%, 50% 50%, 100% 100%, 0% 100%;
+    }
+    25% {
+        background-position: 100% 0%, 0% 100%, 25% 75%, 0% 0%, 100% 100%;
+    }
+    50% {
+        background-position: 50% 50%, 50% 50%, 75% 25%, 100% 0%, 0% 100%;
+    }
+    75% {
+        background-position: 0% 100%, 100% 0%, 25% 25%, 0% 0%, 100% 0%;
+    }
+    100% {
+        background-position: 0% 0%, 100% 0%, 50% 50%, 100% 100%, 0% 100%;
+    }
+}
 
         .container {
             max-width: 1400px;
@@ -52,7 +99,9 @@
 
         .projects {
             padding: 4rem 0;
-            background: #1a1a1a;
+            background: transparent; /* Changed from #1a1a1a */
+            position: relative;
+            z-index: 1;
         }
 
         .projects h2 {
@@ -95,6 +144,25 @@
             padding-top: 56.25%; /* 16:9 Aspect Ratio */
         }
 
+        /* Add this inside your <style> tag */
+.video-placeholder {
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%; /* 16:9 Aspect Ratio */
+}
+
+/* Add the blocking overlay */
+.video-placeholder::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    z-index: 3;
+}
+
         iframe[id^="player-"] {
             position: absolute;
             top: 0;
@@ -102,6 +170,7 @@
             width: 100%;
             height: 100%;
             border: none;
+            pointer-events: none;
         }
 
         .timestamp-nav {
@@ -110,6 +179,7 @@
             padding: 12px;
             background: rgba(0, 0, 0, 0.9);
             border-top: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 4;
         }
 
         .timestamp-nav ul {
@@ -158,10 +228,11 @@
         }
 
         .project-role {
-            color: #ff6b6b;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-            font-size: 0.95rem;
+            color: var(--text-secondary);  /* Instead of #ff6b6b */
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+    letter-spacing: 0.01em;
         }
 
         .project-period {
@@ -242,7 +313,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 2;
+            z-index: 4;
             cursor: pointer;
             background: linear-gradient(
                 180deg,
@@ -364,15 +435,14 @@
     </style>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <div class="hero">
-                <h1>Mathieu Huet</h1>
-                <h2>Animation Technical Director</h2>
-                <p>26 years of AAA game development experience. gameplay animation tech leader.</p>
-            </div>
-        </div>
-    </header>
+    <!-- Header section -->
+<header>
+    <div class="hero">
+        <h1>Mathieu Huet</h1>
+        <h2>Animation Technical Director</h2>
+        <p>Creating systems and tools for game animation pipelines</p>
+    </div>
+</header>
 
     <section class="projects">
         <div class="container">
@@ -382,7 +452,7 @@
                 <div class="project-card">
                     <div class="media-section">
                         <div class="player-container">
-                            <div class="video-placeholder">
+                            <div class="video-placeholder" data-player="bionik">
                                 <div class="custom-thumbnail" data-player="bionik">
                                     <img src="./images/bionik-thumbnail.jpg" alt="Bionik IK System thumbnail">
                                     <button class="play-button" aria-label="Play video">Play</button>
@@ -396,7 +466,14 @@
                                 </iframe>
                             </div>
                         </div>
-                        <div class="timestamp-nav" data-player="bionik">
+                        <div class="timestamp-nav" data-player="bionik" aria-label="Video timestamps">
+                            <ul>
+                                <li><a href="#" data-timestamp="141" data-end="179">reuse curves</a></li>
+                                <li><a href="#" data-timestamp="179" data-end="300">definition</a></li>
+                                <li><a href="#" data-timestamp="404" data-end="417">Single chain</a></li>
+                                <li><a href="#" data-timestamp="655" data-end="1076">data augmentation</a></li>
+                                <li><a href="#" data-timestamp="1076" data-end="3123">A Lot More cases</a></li>
+                            </ul>
                         </div>
                     </div>
                     <div class="project-info">
@@ -404,9 +481,9 @@
                         <div class="project-role">Animation Technical Director</div>
                         <div class="project-period">2021 - 2023 • Ubisoft</div>
                         <div class="project-description">
-                            Ispired by known ubisoft toronto technology prototype named IK rig.
-                            No videos have been publicly released. 
-                            Modular Full body ik solution with editing tools. Engine agnostic.
+                            Inspired by Ubisoft Toronto's technology prototype named IK Rig.
+                            No videos have been publicly released.
+                            A modular full-body IK solution with editing tools. Engine agnostic.
                         </div>
                     </div>
                 </div>
@@ -414,86 +491,7 @@
                 <div class="project-card">
                     <div class="media-section">
                         <div class="player-container">
-                            <div class="video-placeholder">
-                                <div class="custom-thumbnail" data-player="watchdogs">
-                                    <img src="./images/watchdogs-thumbnail.jpg" alt="Watch Dogs thumbnail">
-                                    <button class="play-button" aria-label="Play video">Play</button>
-                                </div>
-                                <iframe id="player-watchdogs"
-                                        src="https://www.youtube.com/embed/Bm2ZcPM6UFE?enablejsapi=1&playlist=Bm2ZcPM6UFE&vq=hd1080&modestbranding=1&rel=0&controls=0&showinfo=0" 
-                                        title="YouTube video player" 
-                                        frameborder="0" 
-                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                                        allowfullscreen>
-                                </iframe>
-                            </div>
-                        </div>
-                        <div class="timestamp-nav" data-player="watchdogs" aria-label="Video timestamps">
-                            <ul>
-                                <li><a href="#" data-timestamp="18" data-end="30">Hands in Pockets</a></li>
-                                <li><a href="#" data-timestamp="161" data-end="170">Stealth Nav</a></li>
-                                <li><a href="#" data-timestamp="184" data-end="200">TakeDown</a></li>
-                                <li><a href="#" data-timestamp="241" data-end="250">Soft Cover</a></li>
-                                <li><a href="#" data-timestamp="306" data-end="316">Layered Hacking</a></li>
-                                <li><a href="#" data-timestamp="376" data-end="386">Foot Chase</a></li>
-                                <li><a href="#" data-timestamp="498" data-end="508">Shop Keeper</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="project-info">
-                        <h3>Watchdogs</h3>
-                        <div class="project-role">Animation Technical Director</div>
-                        <div class="project-period">2008 - 2014 • Ubisoft</div>
-                        <div class="project-description">
-                            Watchdogs gameplay systems
-                        </div>
-                    </div>
-                </div>
-
-                <div class="project-card">
-                    <div class="media-section">
-                        <div class="player-container">
-                            <div class="video-placeholder">
-                                <div class="custom-thumbnail" data-player="farcry">
-                                    <img src="./images/farcry2-thumbnail.jpg" alt="Far Cry 2 thumbnail">
-                                    <button class="play-button" aria-label="Play video">Play</button>
-                                </div>
-                                <iframe id="player-farcry" 
-                                        src="https://www.youtube.com/embed/FCeEvQ68jY8?enablejsapi=1&playlist=FCeEvQ68jY8&vq=hd1080&modestbranding=1&rel=0&controls=0&showinfo=0" 
-                                        title="YouTube video player" 
-                                        frameborder="0" 
-                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                                        allowfullscreen>
-                                </iframe>
-                            </div>
-                        </div>
-                        <div class="timestamp-nav" data-player="farcry" aria-label="Video timestamps">
-                            <ul>
-                                <li><a href="#" data-timestamp="183" data-end="425">AI Hurt</a></li>
-                                <li><a href="#" data-timestamp="425" data-end="519">Reload</a></li>
-                                <li><a href="#" data-timestamp="519" data-end="830">Vehicle AI</a></li>
-                                <li><a href="#" data-timestamp="830" data-end="930">Pickup Obj</a></li>
-                                <li><a href="#" data-timestamp="930" data-end="996">Map & Compass</a></li>
-                                <li><a href="#" data-timestamp="996" data-end="1060">Heal</a></li>
-                                <li><a href="#" data-timestamp="1060" data-end="1158">Weapon Malfunction</a></li>
-                                <li><a href="#" data-timestamp="1158" data-end="1200">Buddy Fix</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="project-info">
-                        <h3>Far Cry 2</h3>
-                        <div class="project-role">Animation Technical Director</div>
-                        <div class="project-period">2006 - 2008 • Ubisoft</div>
-                        <div class="project-description">
-                            More advanced than more recent Farcry 5.
-                        </div>
-                    </div>
-                </div>
-
-                <div class="project-card">
-                    <div class="media-section">
-                        <div class="player-container">
-                            <div class="video-placeholder">
+                            <div class="video-placeholder" data-player="wd2">
                                 <div class="custom-thumbnail" data-player="wd2">
                                     <img src="./images/watchdogs2-thumbnail.jpg" alt="Watch Dogs 2 thumbnail">
                                     <button class="play-button" aria-label="Play video">Play</button>
@@ -509,9 +507,10 @@
                         </div>
                         <div class="timestamp-nav" data-player="wd2" aria-label="Video timestamps">
                             <ul>
-                                <li><a href="#" data-timestamp="0" data-end="60">Living City</a></li>
-                                <li><a href="#" data-timestamp="60" data-end="120">AI Behaviors</a></li>
-                                <li><a href="#" data-timestamp="120" data-end="180">Crowd Systems</a></li>
+                                <li><a href="#" data-timestamp="76" data-end="182">Reaction Matrix</a></li>
+                                <li><a href="#" data-timestamp="182" data-end="366">Anecdote Factory</a></li>
+                                <li><a href="#" data-timestamp="366" data-end="728">reactive characters</a></li>
+                                <li><a href="#" data-timestamp="728" data-end="900">Attractors</a></li>
                             </ul>
                         </div>
                     </div>
@@ -520,7 +519,127 @@
                         <div class="project-role">Animation Technical Director</div>
                         <div class="project-period">2014 - 2016 • Ubisoft</div>
                         <div class="project-description">
-                            Advanced AI and crowd systems for a living, breathing San Francisco.
+                            Advanced crowd and NPC behavior systems for a living, breathing San Francisco.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="media-section">
+                        <div class="player-container">
+                            <div class="video-placeholder" data-player="wd2player">
+                                <div class="custom-thumbnail" data-player="wd2player">
+                                    <img src="./images/watchdogs2-thumbnail.jpg" alt="Watch Dogs 2 Player Systems thumbnail">
+                                    <button class="play-button" aria-label="Play video">Play</button>
+                                </div>
+                                <iframe id="player-wd2player"
+                                        src="https://www.youtube.com/embed/-XMg0bCU1P8?enablejsapi=1&playlist=-XMg0bCU1P8&vq=hd1080&modestbranding=1&rel=0&controls=0&showinfo=0" 
+                                        title="YouTube video player" 
+                                        frameborder="0" 
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                                        allowfullscreen>
+                                </iframe>
+                            </div>
+                        </div>
+                        <div class="timestamp-nav" data-player="wd2player" aria-label="Video timestamps">
+                            <ul>
+                                <li><a href="#" data-timestamp="83" data-end="106">Player Movement</a></li>
+                                <li><a href="#" data-timestamp="350" data-end="355">Open door</a></li>
+                                <li><a href="#" data-timestamp="478" data-end="493">selfie</a></li>
+                                <li><a href="#" data-timestamp="650" data-end="663">soft Parkour</a></li>
+                                <li><a href="#" data-timestamp="689" data-end="699">seamless interaction</a></li>
+                                <li><a href="#" data-timestamp="990" data-end="996">Thuderball takedown</a></li>
+                                <li><a href="#" data-timestamp="908" data-end="927">networked animation</a></li>
+                                <li><a href="#" data-timestamp="1068" data-end="1075">networked car</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="project-info">
+                        <h3>Watch Dogs 2 Player Systems</h3>
+                        <div class="project-role">Animation Technical Director</div>
+                        <div class="project-period">2014 - 2016 • Ubisoft</div>
+                        <div class="project-description">
+                            Advanced player movement and animation systems including parkour, stealth, and combat mechanics.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="project-card">
+                    <div class="media-section">
+                        <div class="player-container">
+                            <div class="video-placeholder" data-player="watchdogs">
+                                <div class="custom-thumbnail" data-player="watchdogs">
+                                    <img src="./images/watchdogs-thumbnail.jpg" alt="Watch Dogs thumbnail">
+                                    <button class="play-button" aria-label="Play video">Play</button>
+                                </div>
+                                <iframe id="player-watchdogs"
+                                        src="https://www.youtube.com/embed/Bm2ZcPM6UFE?enablejsapi=1&playlist=Bm2ZcPM6UFE&vq=hd1080&modestbranding=1&rel=0&controls=0&showinfo=0" 
+                                        title="YouTube video player" 
+                                        frameborder="0" 
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                                        allowfullscreen>
+                                </iframe>
+                            </div>
+                        </div>
+                        <div class="timestamp-nav" data-player="watchdogs" aria-label="Video timestamps">
+                            <ul>
+                                <li><a href="#" data-timestamp="35" data-end="48">Hands in Pockets</a></li>
+                                <li><a href="#" data-timestamp="161" data-end="184">Stealth Nav</a></li>
+                                <li><a href="#" data-timestamp="184" data-end="190">TakeDown</a></li>
+                                <li><a href="#" data-timestamp="241" data-end="255">Soft Cover</a></li>
+                                <li><a href="#" data-timestamp="306" data-end="312">Layered Hacking</a></li>
+                                <li><a href="#" data-timestamp="376" data-end="398">Foot Chase</a></li>
+                                <li><a href="#" data-timestamp="498" data-end="508">Shop Keeper</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="project-info">
+                        <h3>WatchDogs</h3>
+                        <div class="project-role">Animation Technical Director</div>
+                        <div class="project-period">2008 - 2014 • Ubisoft</div>
+                        <div class="project-description">
+                            Player movement and animation systems including parkour mechanics and combat.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="media-section">
+                        <div class="player-container">
+                            <div class="video-placeholder" data-player="farcry">
+                                <div class="custom-thumbnail" data-player="farcry">
+                                    <img src="./images/farcry2-thumbnail.jpg" alt="Far Cry 2 thumbnail">
+                                    <button class="play-button" aria-label="Play video">Play</button>
+                                </div>
+                                <iframe id="player-farcry" 
+                                        src="https://www.youtube.com/embed/FCeEvQ68jY8?enablejsapi=1&playlist=FCeEvQ68jY8&vq=hd1080&modestbranding=1&rel=0&controls=0&showinfo=0" 
+                                        title="YouTube video player" 
+                                        frameborder="0" 
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                                        allowfullscreen>
+                                </iframe>
+                            </div>
+                        </div>
+                        <div class="timestamp-nav" data-player="farcry" aria-label="Video timestamps">
+                            <ul>
+                                <li><a href="#" data-timestamp="183" data-end="323">AI Hurt</a></li>
+                                <li><a href="#" data-timestamp="425" data-end="431">Reload</a></li>
+                                <li><a href="#" data-timestamp="518" data-end="546">Vehicle AI</a></li>
+                                <li><a href="#" data-timestamp="830" data-end="839">Pickup Obj</a></li>
+                                <li><a href="#" data-timestamp="930" data-end="943">Map & Compass</a></li>
+                                <li><a href="#" data-timestamp="996" data-end="1045">Heal</a></li>
+                                <li><a href="#" data-timestamp="1060" data-end="1099">Weapon Malfunction</a></li>
+                                <li><a href="#" data-timestamp="1158" data-end="1228">Buddy Fix</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="project-info">
+                        <h3>Far Cry 2</h3>
+                        <div class="project-role">Animation Technical Director</div>
+                        <div class="project-period">2006 - 2008 • Ubisoft</div>
+                        <div class="project-description">
+                            Implemented key gameplay systems including AI behavior, weapon mechanics, and vehicle interactions.
                         </div>
                     </div>
                 </div>
@@ -533,9 +652,9 @@
     <div class="contact-bar">
         <div class="container">
             <div class="contact-info">
-                <a href="mailto:0mathieuhuet@gmail.com" class="contact-item">0mathieuhuet@gmail.com</a>
+                <a href="mailto:0mathieihuet@gmail.com" class="contact-item">0mathieihuet@gmail.com</a>
                 <a href="tel:+15149675099" class="contact-item">+1(514)967-5099</a>
-                <a href="#" class="contact-item">LinkedIn Profile</a>
+                <a href="#" class="www.linkedin.com/in/mathieu-huet-996b521">LinkedIn Profile</a>
             </div>
         </div>
     </div>

@@ -1,19 +1,15 @@
-// YouTube Player Management
+// Player Management
 let players = {};
 let playbackStates = {};
 
 // Initialize YouTube API
-function loadYouTubeAPI() {
-    const tag = document.createElement('script');
-    tag.src = "https://www.youtube.com/iframe_api";
-    const firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-}
+const tag = document.createElement('script');
+tag.src = "https://www.youtube.com/iframe_api";
+const firstScriptTag = document.getElementsByTagName('script')[0];
+firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-// YouTube Player Initialization
 function onYouTubeIframeAPIReady() {
-    const playerIds = ['farcry', 'watchdogs', 'bionik', 'wd2'];
-    
+    const playerIds = ['bionik', 'watchdogs', 'farcry', 'wd2', 'wd2player'];
     playerIds.forEach(id => {
         players[id] = new YT.Player(`player-${id}`, {
             events: {
@@ -28,129 +24,115 @@ function onPlayerReady(event) {
     const playerId = event.target.getIframe().id.split('-')[1];
     setupTimestampNavigation(playerId);
     setupThumbnailHandler(playerId);
+    setupVideoClickHandler(playerId);
+}
+
+function setupVideoClickHandler(playerId) {
+    const videoPlaceholder = document.querySelector(`.video-placeholder[data-player="${playerId}"]`);
+    if (!videoPlaceholder) return;
+
+    videoPlaceholder.addEventListener('click', (e) => {
+        // Don't handle clicks on thumbnail or timestamp nav
+        if (e.target.closest('.custom-thumbnail') || e.target.closest('.timestamp-nav')) {
+            return;
+        }
+
+        // Reset to default state
+        if (players[playerId].currentInterval) {
+            clearInterval(players[playerId].currentInterval);
+            players[playerId].currentInterval = null;
+        }
+
+        clearActiveTimestamps(playerId);
+        players[playerId].pauseVideo();
+        playbackStates[playerId] = 'paused';
+
+        const thumbnail = document.querySelector(`.custom-thumbnail[data-player="${playerId}"]`);
+        if (thumbnail) {
+            thumbnail.classList.remove('hidden');
+            players[playerId].thumbnailHidden = false;
+        }
+    });
 }
 
 function onPlayerStateChange(event) {
     const playerId = event.target.getIframe().id.split('-')[1];
-    
-    if (event.data === YT.PlayerState.PAUSED) {
-        playbackStates[playerId] = 'paused';
-        clearInterval(players[playerId].currentInterval);
-    }
+    playbackStates[playerId] = event.data === YT.PlayerState.PAUSED ? 'paused' : 'playing';
 }
 
-// Timestamp Navigation Setup
 function setupTimestampNavigation(playerId) {
-    const timestamps = document.querySelectorAll(`.timestamp-nav[data-player="${playerId}"] a`);
-    
-    timestamps.forEach(link => {
-        link.addEventListener('click', async (e) => {
+    document.querySelectorAll(`.timestamp-nav[data-player="${playerId}"] a`).forEach(link => {
+        link.addEventListener('click', (e) => {
             e.preventDefault();
             const startTime = parseInt(e.target.dataset.timestamp);
             const endTime = parseInt(e.target.dataset.end);
             
             if (isNaN(startTime)) return;
             
-            clearActiveTimestamps(playerId);
-            e.target.classList.add('active');
-            
-            // Hide thumbnail if visible
             const thumbnail = document.querySelector(`.custom-thumbnail[data-player="${playerId}"]`);
             if (thumbnail && !thumbnail.classList.contains('hidden')) {
                 thumbnail.classList.add('hidden');
                 players[playerId].thumbnailHidden = true;
             }
 
+            clearActiveTimestamps(playerId);
+            if (players[playerId].currentInterval) {
+                clearInterval(players[playerId].currentInterval);
+            }
+
+            e.target.classList.add('active');
+            
             players[playerId].seekTo(startTime);
             players[playerId].playVideo();
+            playbackStates[playerId] = 'playing';
 
             if (!isNaN(endTime)) {
-                await waitForSectionEnd(playerId, endTime);
-                e.target.classList.remove('active');
-                players[playerId].pauseVideo();
+                players[playerId].currentInterval = setInterval(() => {
+                    if (!players[playerId]) return;
+                    
+                    const currentTime = players[playerId].getCurrentTime();
+                    if (currentTime >= endTime) {
+                        clearInterval(players[playerId].currentInterval);
+                        
+                        const timestamps = Array.from(document.querySelectorAll(`.timestamp-nav[data-player="${playerId}"] a`));
+                        const currentIndex = timestamps.indexOf(e.target);
+                        
+                        if (currentIndex < timestamps.length - 1) {
+                            timestamps[currentIndex + 1].click();
+                        } else {
+                            clearActiveTimestamps(playerId);
+                            players[playerId].pauseVideo();
+                            
+                            if (thumbnail) {
+                                thumbnail.classList.remove('hidden');
+                                players[playerId].thumbnailHidden = false;
+                            }
+                        }
+                    }
+                }, 200);
             }
         });
     });
 }
 
-// Thumbnail Handler Setup
 function setupThumbnailHandler(playerId) {
     const thumbnail = document.querySelector(`.custom-thumbnail[data-player="${playerId}"]`);
     if (!thumbnail) return;
 
-    thumbnail.addEventListener('click', async () => {
+    thumbnail.addEventListener('click', () => {
         thumbnail.classList.add('hidden');
         players[playerId].thumbnailHidden = true;
 
-        const timestamps = Array.from(document.querySelectorAll(`.timestamp-nav[data-player="${playerId}"] a`));
-        if (timestamps.length === 0) {
+        const firstTimestamp = document.querySelector(`.timestamp-nav[data-player="${playerId}"] a`);
+        if (firstTimestamp) {
+            firstTimestamp.click();
+        } else {
             players[playerId].playVideo();
-            return;
-        }
-
-        for (const timestamp of timestamps) {
-            if (playbackStates[playerId] === 'paused') break;
-            
-            const startTime = parseInt(timestamp.dataset.timestamp);
-            const endTime = parseInt(timestamp.dataset.end);
-            
-            if (isNaN(startTime) || isNaN(endTime)) continue;
-
-            clearActiveTimestamps(playerId);
-            timestamp.classList.add('active');
-            
-            players[playerId].seekTo(startTime);
-            players[playerId].playVideo();
-
-            await waitForSectionEnd(playerId, endTime);
-            timestamp.classList.remove('active');
         }
     });
 }
 
-// Helper Functions
 function clearActiveTimestamps(playerId) {
     document.querySelectorAll(`.timestamp-nav[data-player="${playerId}"] a`)
         .forEach(link => link.classList.remove('active'));
 }
-
-function waitForSectionEnd(playerId, endTime) {
-    return new Promise((resolve) => {
-        const checkTime = setInterval(() => {
-            if (playbackStates[playerId] === 'paused') {
-                clearInterval(checkTime);
-                resolve();
-                return;
-            }
-            
-            const currentTime = players[playerId].getCurrentTime();
-            if (currentTime >= endTime) {
-                clearInterval(checkTime);
-                resolve();
-            }
-        }, 1000);
-        players[playerId].currentInterval = checkTime;
-    });
-}
-
-// Setup functions
-function setupThumbnailHandlers() {
-    const playerIds = ['farcry', 'watchdogs', 'bionik', 'wd2'];
-    playerIds.forEach(id => setupThumbnailHandler(id));
-}
-
-function setupProjectCardAnimations() {
-    document.querySelectorAll('.project-card').forEach(card => {
-        card.addEventListener('mouseenter', () => {
-            card.style.transform = 'translateY(-10px)';
-        });
-        card.addEventListener('mouseleave', () => {
-            card.style.transform = 'translateY(0)';
-        });
-    });
-}
-
-// Initialize when DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
-    loadYouTubeAPI();
-});
