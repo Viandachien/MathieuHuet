@@ -324,6 +324,42 @@
                 flex-direction: column;
                 gap: 1rem;
             }
+
+            .player-container {
+        pointer-events: none;
+    }
+    
+    .custom-thumbnail,
+    .timestamp-nav {
+        pointer-events: auto;
+    }
+
+    .timestamp-nav ul {
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .timestamp-nav a {
+        width: 90%;
+        text-align: center;
+    }
+    
+    /* Ensure videos are responsive */
+    .video-wrapper {
+        position: relative;
+        padding-bottom: 56.25%;
+        height: 0;
+        overflow: hidden;
+    }
+
+    .video-wrapper iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
         }
     </style>
 </head>
@@ -352,7 +388,7 @@
                                     <button class="play-button" aria-label="Play video">Play</button>
                                 </div>
                                 <iframe id="player-bionik"
-                                        src="https://www.youtube.com/embed/KLjTU0yKS00?enablejsapi=1&playlist=KLjTU0yKS00&vq=hd1080" 
+                                        src="https://www.youtube.com/embed/KLjTU0yKS00?enablejsapi=1&playlist=KLjTU0yKS00&vq=hd1080&modestbranding=1&rel=0&controls=0&showinfo=0" 
                                         title="YouTube video player" 
                                         frameborder="0" 
                                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
@@ -384,7 +420,7 @@
                                     <button class="play-button" aria-label="Play video">Play</button>
                                 </div>
                                 <iframe id="player-watchdogs"
-                                        src="https://www.youtube.com/embed/Bm2ZcPM6UFE?enablejsapi=1&playlist=Bm2ZcPM6UFE&vq=hd1080" 
+                                        src="https://www.youtube.com/embed/Bm2ZcPM6UFE?enablejsapi=1&playlist=Bm2ZcPM6UFE&vq=hd1080&modestbranding=1&rel=0&controls=0&showinfo=0" 
                                         title="YouTube video player" 
                                         frameborder="0" 
                                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
@@ -423,7 +459,7 @@
                                     <button class="play-button" aria-label="Play video">Play</button>
                                 </div>
                                 <iframe id="player-farcry" 
-                                        src="https://www.youtube.com/embed/FCeEvQ68jY8?enablejsapi=1&playlist=FCeEvQ68jY8&vq=hd1080" 
+                                        src="https://www.youtube.com/embed/FCeEvQ68jY8?enablejsapi=1&playlist=FCeEvQ68jY8&vq=hd1080&modestbranding=1&rel=0&controls=0&showinfo=0" 
                                         title="YouTube video player" 
                                         frameborder="0" 
                                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
@@ -463,7 +499,7 @@
                                     <button class="play-button" aria-label="Play video">Play</button>
                                 </div>
                                 <iframe id="player-wd2"
-                                        src="https://www.youtube.com/embed/HTK-bVRzp5k?enablejsapi=1&playlist=HTK-bVRzp5k&vq=hd1080" 
+                                        src="https://www.youtube.com/embed/HTK-bVRzp5k?enablejsapi=1&playlist=HTK-bVRzp5k&vq=hd1080&modestbranding=1&rel=0&controls=0&showinfo=0" 
                                         title="YouTube video player" 
                                         frameborder="0" 
                                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
@@ -504,266 +540,7 @@
         </div>
     </div>
 
-    <script>
-        // Simple hover animations
-        document.querySelectorAll('.project-card').forEach(card => {
-            const handleMouseEnter = function() {
-                this.style.transform = 'translateY(-10px)';
-            };
-            
-            const handleMouseLeave = function() {
-                this.style.transform = 'translateY(0)';
-            };
-            
-            card.addEventListener('mouseenter', handleMouseEnter);
-            card.addEventListener('mouseleave', handleMouseLeave);
-            
-            // Cleanup on page unload
-            window.addEventListener('unload', () => {
-                card.removeEventListener('mouseenter', handleMouseEnter);
-                card.removeEventListener('mouseleave', handleMouseLeave);
-            });
-        });
-
-    </script>
-    <script>
-        // Load YouTube API
-        var tag = document.createElement('script');
-        tag.src = "https://www.youtube.com/iframe_api";
-        var firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-        // Add error handling for API loading
-        tag.onerror = function() {
-            console.error('Failed to load YouTube API');
-        };
-
-        var players = {};
-        var playbackStates = {};
-
-        function onYouTubeIframeAPIReady() {
-            try {
-                // Initialize Far Cry 2 player
-                players.farcry = new YT.Player('player-farcry', {
-                    events: {
-                        'onReady': onPlayerReady,
-                        'onStateChange': onPlayerStateChange
-                    }
-                });
-
-                // Initialize Watch Dogs player
-                players.watchdogs = new YT.Player('player-watchdogs', {
-                    events: {
-                        'onReady': onPlayerReady,
-                        'onStateChange': onPlayerStateChange
-                    }
-                });
-
-                // Initialize Bionik player
-                players.bionik = new YT.Player('player-bionik', {
-                    events: {
-                        'onReady': onPlayerReady,
-                        'onStateChange': onPlayerStateChange
-                    }
-                });
-
-                // Initialize Watch Dogs 2 player
-                players.wd2 = new YT.Player('player-wd2', {
-                    events: {
-                        'onReady': onPlayerReady,
-                        'onStateChange': onPlayerStateChange
-                    }
-                });
-            } catch (error) {
-                console.error('Failed to initialize YouTube players:', error);
-            }
-        }
-
-        function onPlayerReady(event) {
-            const playerId = event.target.getIframe().id.split('-')[1];
-            
-            if (!players[playerId]) {
-                console.error(`Player ${playerId} not initialized`);
-                return;
-            }
-            
-            document.querySelectorAll(`.timestamp-nav[data-player="${playerId}"] a`).forEach(link => {
-                link.addEventListener('click', async (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    
-                    // Reset pause state when clicking timestamp
-                    playbackStates[playerId] = 'playing';
-                    
-                    const timestamps = Array.from(document.querySelectorAll(`.timestamp-nav[data-player="${playerId}"] a`));
-                    const currentIndex = timestamps.indexOf(e.target);
-                    
-                    // Clear any existing interval
-                    if (players[playerId].currentInterval) {
-                        clearInterval(players[playerId].currentInterval);
-                    }
-                    
-                    // Hide thumbnail if visible
-                    const thumbnail = document.querySelector(`.custom-thumbnail[data-player="${playerId}"]`);
-                    if (thumbnail && !thumbnail.classList.contains('hidden')) {
-                        thumbnail.classList.add('hidden');
-                        players[playerId].thumbnailHidden = true;
-                    }
-
-                    // Play sections sequentially starting from clicked timestamp
-                    for (let i = currentIndex; i < timestamps.length; i++) {
-                        const timestamp = timestamps[i];
-                        const startTime = parseInt(timestamp.dataset.timestamp);
-                        const endTime = parseInt(timestamp.dataset.end);
-                        
-                        if (isNaN(startTime) || isNaN(endTime)) continue;
-
-                        clearActiveTimestamps(playerId);
-                        timestamp.classList.add('active');
-                        
-                        players[playerId].seekTo(startTime);
-                        players[playerId].playVideo();
-
-                        await new Promise((resolve) => {
-                            // Update the Promise to check for pause state:
-                            const checkTime = setInterval(() => {
-                                if (playbackStates[playerId] === 'paused') {
-                                    clearInterval(checkTime);
-                                    resolve();
-                                    return;
-                                }
-                                
-                                const currentTime = players[playerId].getCurrentTime();
-                                if (currentTime >= endTime) {
-                                    clearInterval(checkTime);
-                                    timestamp.classList.remove('active');
-                                    resolve();
-                                }
-                            }, 1000);
-                            players[playerId].currentInterval = checkTime;
-                        });
-                    }
-                    
-                    // After last section, reset to initial state
-                    clearActiveTimestamps(playerId);
-                    players[playerId].pauseVideo();
-                    if (thumbnail && players[playerId].thumbnailHidden) {
-                        thumbnail.classList.remove('hidden');
-                        players[playerId].thumbnailHidden = false;
-                    }
-                });
-            });
-        }
-
-        // Add helper function to clear active timestamps
-        function clearActiveTimestamps(playerId) {
-            document.querySelectorAll(`.timestamp-nav[data-player="${playerId}"] a`).forEach(link => {
-                link.classList.remove('active');
-            });
-        }
-
-        function handleThumbnailError(thumbnailElement) {
-            const playerId = thumbnailElement.dataset.player;
-            const videoId = players[playerId].getVideoData().video_id;
-            const imgElement = thumbnailElement.querySelector('img');
-            if (imgElement) {
-                imgElement.src = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
-            }
-        }
-
-        document.querySelectorAll('.custom-thumbnail').forEach(thumbnail => {
-            const img = thumbnail.querySelector('img');
-            if (img) {
-                img.onerror = () => handleThumbnailError(thumbnail);
-            }
-        });
-
-        // Update the custom-thumbnail click handler:
-        document.querySelectorAll('.custom-thumbnail').forEach(thumbnail => {
-            thumbnail.addEventListener('click', async function() {
-                const playerId = this.dataset.player;
-                if (!players[playerId]) {
-                    console.error(`Player ${playerId} not initialized`);
-                    return;
-                }
-                
-                // Hide thumbnail
-                this.classList.add('hidden');
-                players[playerId].thumbnailHidden = true;
-
-                // Get all timestamps for this player
-                const timestamps = Array.from(document.querySelectorAll(`.timestamp-nav[data-player="${playerId}"] a`));
-                
-                // For Bionik video (no timestamps), just play the video
-                if (playerId === 'bionik' || timestamps.length === 0) {
-                    players[playerId].playVideo();
-                    return;
-                }
-
-                // For videos with timestamps
-                try {
-                    // Start from first timestamp
-                    const firstTimestamp = timestamps[0];
-                    const startTime = parseInt(firstTimestamp.dataset.timestamp);
-                    
-                    // Initial seek and play
-                    players[playerId].seekTo(startTime);
-                    players[playerId].playVideo();
-                    firstTimestamp.classList.add('active');
-
-                    // Play each section sequentially
-                    for (const timestamp of timestamps) {
-                        const start = parseInt(timestamp.dataset.timestamp);
-                        const end = parseInt(timestamp.dataset.end);
-                        
-                        if (isNaN(start) || isNaN(end)) continue;
-
-                        clearActiveTimestamps(playerId);
-                        timestamp.classList.add('active');
-
-                        await new Promise((resolve, reject) => {
-                            const checkTime = setInterval(() => {
-                                const currentTime = players[playerId].getCurrentTime();
-                                if (currentTime >= end) {
-                                    clearInterval(checkTime);
-                                    timestamp.classList.remove('active');
-                                    resolve();
-                                }
-                            }, 1000);
-                            players[playerId].currentInterval = checkTime;
-                        });
-                    }
-                } catch (error) {
-                    console.error('Error playing video sections:', error);
-                    // Fallback to normal play if something goes wrong
-                    players[playerId].playVideo();
-                }
-            });
-        });
-
-        // Add this new function to handle player state changes:
-        function onPlayerStateChange(event) {
-            const playerId = event.target.getIframe().id.split('-')[1];
-            
-            if (event.data === YT.PlayerState.PAUSED) {
-                // User manually paused the video
-                playbackStates[playerId] = 'paused';
-                
-                // Clear any existing interval
-                if (players[playerId].currentInterval) {
-                    clearInterval(players[playerId].currentInterval);
-                    players[playerId].currentInterval = null;
-                }
-                
-                // Clear active timestamp
-                clearActiveTimestamps(playerId);
-            } else if (event.data === YT.PlayerState.PLAYING) {
-                // Only set to playing if it wasn't manually paused
-                if (playbackStates[playerId] !== 'paused') {
-                    playbackStates[playerId] = 'playing';
-                }
-            }
-        }
-    </script>
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script src="js/main.js"></script>
 </body>
 </html>
