@@ -72,52 +72,83 @@
             background: #2a2a2a;
             border-radius: 15px;
             overflow: hidden;
-            transition: transform 0.3s ease;
             border: 2px solid #333;
         }
 
-        .project-card:hover {
-            transform: translateY(-5px);
-            border-color: #00d4ff;
-        }
-
-        .video-container {
+        .media-section {
             position: relative;
             width: 100%;
-            height: 300px;
             background: #000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-bottom: 2px solid #333;
+            border-radius: 8px 8px 0 0;
+            overflow: hidden;
+        }
+
+        .player-container {
+            position: relative;
+            width: 100%;
+            z-index: 1;
         }
 
         .video-placeholder {
-            color: #00d4ff;
-            text-align: center;
-            font-size: 1.2rem;
-            padding: 2rem;
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio */
         }
 
-        .video-placeholder h4 {
-            font-size: 1.4rem;
-            margin-bottom: 1rem;
-        }
-
-        .video-placeholder p {
-            opacity: 0.7;
-            font-size: 0.9rem;
-        }
-
-        iframe {
+        iframe[id^="player-"] {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
             border: none;
         }
 
+        .timestamp-nav {
+            position: relative;
+            width: 100%;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.9);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .timestamp-nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .timestamp-nav a {
+            display: inline-block;
+            padding: 6px 12px;
+            background: rgba(0, 212, 255, 0.2);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .timestamp-nav a:hover {
+            background: rgba(0, 212, 255, 0.4);
+        }
+
+        /* Add this to your existing CSS */
+        .timestamp-nav a.active {
+            background: rgba(0, 212, 255, 0.6);
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+            transform: translateY(-1px);
+        }
+
         .project-info {
             padding: 2rem;
-            color: white;
+            color: #fff;
+            background: #2a2a2a;
+            border-radius: 0 0 8px 8px;
         }
 
         .project-info h3 {
@@ -169,35 +200,115 @@
             color: #ff6b6b;
         }
 
-        .video-timestamps {
-            position: absolute;
-            bottom: 10px;
-            left: 0;
-            right: 0;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 10px;
+        .key-features {
+            margin-top: 1.5rem;
         }
 
-        .video-timestamps ul {
+        .key-features h3 {
+            color: rgba(0, 212, 255, 0.8);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            font-weight: normal;
+        }
+
+        .key-features ul {
             list-style: none;
             display: flex;
-            justify-content: center;
-            gap: 15px;
             flex-wrap: wrap;
+            gap: 10px;
+            margin: 0;
+            padding: 0;
         }
 
-        .video-timestamps a {
+        .key-features a {
+            display: inline-block;
+            padding: 6px 12px;
+            background: rgba(0, 212, 255, 0.2);
             color: #fff;
             text-decoration: none;
-            font-size: 0.9rem;
-            padding: 4px 8px;
             border-radius: 4px;
-            background: rgba(0, 212, 255, 0.2);
-            transition: background 0.3s ease;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
         }
 
-        .video-timestamps a:hover {
+        .key-features a:hover {
             background: rgba(0, 212, 255, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .custom-thumbnail {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            cursor: pointer;
+            background: linear-gradient(
+                180deg,
+                rgba(0,0,0,0.4) 0%,
+                rgba(0,0,0,0.2) 50%,
+                rgba(0,0,0,0.6) 100%
+            );
+        }
+
+        .custom-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: 
+                saturate(0.85) 
+                contrast(1.1) 
+                brightness(0.9)
+                hue-rotate(-5deg);
+            transition: all 0.3s ease;
+            mix-blend-mode: color-dodge;
+        }
+
+        .custom-thumbnail:hover img {
+            filter: 
+                saturate(1) 
+                contrast(1.15) 
+                brightness(0.95)
+                hue-rotate(0deg);
+        }
+
+        .custom-thumbnail::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 212, 255, 0.05);
+            pointer-events: none;
+        }
+
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 212, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(2px);
+        }
+
+        .custom-thumbnail:hover .play-button {
+            background: rgba(0, 212, 255, 0.4);
+            transform: translate(-50%, -50%) scale(1.05);
+        }
+
+        /* Add this CSS rule */
+        .custom-thumbnail.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.6s ease;
         }
 
         @media (max-width: 768px) {
@@ -209,17 +320,9 @@
                 grid-template-columns: 1fr;
             }
             
-            .project-grid {
-                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            }
-            
             .contact-info {
                 flex-direction: column;
                 gap: 1rem;
-            }
-
-            .video-container {
-                height: 250px;
             }
         }
     </style>
@@ -230,108 +333,114 @@
             <div class="hero">
                 <h1>Mathieu Huet</h1>
                 <h2>Animation Technical Director</h2>
-                <p>26 years of AAA game development experience. Master of Unreal Engine and animation systems.</p>
+                <p>26 years of AAA game development experience. gameplay animation tech leader.</p>
             </div>
         </div>
     </header>
 
     <section class="projects">
         <div class="container">
-            <h2>Projects & Work</h2>
+            <h2>Relevant Projects</h2>
             <div class="project-grid">
                 
                 <div class="project-card">
-                    <div class="video-container">
-                        <div class="video-placeholder">
-                            <h4>Current Project</h4>
-                            <p>Open world action adventure gameplay and systems</p>
-                            <p><em>Add gameplay trailer or development footage</em></p>
+                    <div class="media-section">
+                        <div class="player-container">
+                            <div class="video-placeholder">
+                                <div class="custom-thumbnail" data-player="bionik">
+                                    <img src="./images/bionik-thumbnail.jpg" alt="Bionik IK System thumbnail">
+                                    <button class="play-button" aria-label="Play video">Play</button>
+                                </div>
+                                <iframe id="player-bionik"
+                                        src="https://www.youtube.com/embed/KLjTU0yKS00?enablejsapi=1&playlist=KLjTU0yKS00&vq=hd1080" 
+                                        title="YouTube video player" 
+                                        frameborder="0" 
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                                        allowfullscreen>
+                                </iframe>
+                            </div>
+                        </div>
+                        <div class="timestamp-nav" data-player="bionik">
                         </div>
                     </div>
                     <div class="project-info">
-                        <h3>Open World Action Adventure</h3>
-                        <div class="project-role">Principal Technical Animator</div>
-                        <div class="project-period">2023 - Present • Bad Brain Games</div>
-                        <div class="project-description">
-                            Leading animation systems: rigging, motion matching, Unreal animation framework, Metahumans integration.
-                        </div>
-                    </div>
-                </div>
-
-                <div class="project-card">
-                    <div class="video-container">
-                        <div class="video-placeholder">
-                            <h4>Watch Dogs 2</h4>
-                            <p>Living City emergent system showcase</p>
-                            <p><em>Add official trailer or gameplay footage</em></p>
-                        </div>
-                    </div>
-                    <div class="project-info">
-                        <h3>Watch Dogs 2</h3>
+                        <h3>Bionik IK System</h3>
                         <div class="project-role">Animation Technical Director</div>
-                        <div class="project-period">2014 - 2017 • Ubisoft</div>
-                        <div class="project-description">
-                            Directed the Living City emergent system that brought San Francisco to life with dynamic character behaviors.
-                        </div>
-                    </div>
-                </div>
-
-                <div class="project-card">
-                    <div class="video-container">
-                        <div class="video-placeholder">
-                            <h4>Bionik IK System</h4>
-                            <p>Multi-platform full-body inverse kinematics</p>
-                            <p><em>Add technical demonstration or presentation footage</em></p>
-                        </div>
-                    </div>
-                    <div class="project-info">
-                        <h3>Bionik - IK System</h3>
-                        <div class="project-role">Technical Director</div>
                         <div class="project-period">2021 - 2023 • Ubisoft</div>
                         <div class="project-description">
-                            Revolutionary full-body IK system now used across most Ubisoft projects. Presented at UDC 2021 & 2022.
+                            Ispired by known ubisoft toronto technology prototype named IK rig.
+                            No videos have been publicly released. 
+                            Modular Full body ik solution with editing tools. Engine agnostic.
                         </div>
                     </div>
                 </div>
-
+                
                 <div class="project-card">
-                    <div class="video-container">
-                        <div class="video-placeholder">
-                            <h4>Watch Dogs</h4>
-                            <p>Original groundbreaking hacking adventure</p>
-                            <p><em>Add official trailer or development showcase</em></p>
+                    <div class="media-section">
+                        <div class="player-container">
+                            <div class="video-placeholder">
+                                <div class="custom-thumbnail" data-player="watchdogs">
+                                    <img src="./images/watchdogs-thumbnail.jpg" alt="Watch Dogs thumbnail">
+                                    <button class="play-button" aria-label="Play video">Play</button>
+                                </div>
+                                <iframe id="player-watchdogs"
+                                        src="https://www.youtube.com/embed/Bm2ZcPM6UFE?enablejsapi=1&playlist=Bm2ZcPM6UFE&vq=hd1080" 
+                                        title="YouTube video player" 
+                                        frameborder="0" 
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                                        allowfullscreen>
+                                </iframe>
+                            </div>
+                        </div>
+                        <div class="timestamp-nav" data-player="watchdogs" aria-label="Video timestamps">
+                            <ul>
+                                <li><a href="#" data-timestamp="18" data-end="30">Hands in Pockets</a></li>
+                                <li><a href="#" data-timestamp="161" data-end="170">Stealth Nav</a></li>
+                                <li><a href="#" data-timestamp="184" data-end="200">TakeDown</a></li>
+                                <li><a href="#" data-timestamp="241" data-end="250">Soft Cover</a></li>
+                                <li><a href="#" data-timestamp="306" data-end="316">Layered Hacking</a></li>
+                                <li><a href="#" data-timestamp="376" data-end="386">Foot Chase</a></li>
+                                <li><a href="#" data-timestamp="498" data-end="508">Shop Keeper</a></li>
+                            </ul>
                         </div>
                     </div>
                     <div class="project-info">
-                        <h3>Watch Dogs</h3>
+                        <h3>Watchdogs</h3>
                         <div class="project-role">Animation Technical Director</div>
                         <div class="project-period">2008 - 2014 • Ubisoft</div>
                         <div class="project-description">
-                            Established technical animation foundation for this groundbreaking open-world title.
+                            Watchdogs gameplay systems
                         </div>
                     </div>
                 </div>
 
                 <div class="project-card">
-                    <div class="video-container">
-                        <iframe width="560" height="315" 
-                            src="https://www.youtube.com/embed/FCeEvQ68jY8?enablejsapi=1" 
-                            title="YouTube video player" 
-                            frameborder="0" 
-                            id="farCry2Video"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                            allowfullscreen>
-                        </iframe>
-                        <div class="video-timestamps">
-                            <h5>Key Animation Features:</h5>
+                    <div class="media-section">
+                        <div class="player-container">
+                            <div class="video-placeholder">
+                                <div class="custom-thumbnail" data-player="farcry">
+                                    <img src="./images/farcry2-thumbnail.jpg" alt="Far Cry 2 thumbnail">
+                                    <button class="play-button" aria-label="Play video">Play</button>
+                                </div>
+                                <iframe id="player-farcry" 
+                                        src="https://www.youtube.com/embed/FCeEvQ68jY8?enablejsapi=1&playlist=FCeEvQ68jY8&vq=hd1080" 
+                                        title="YouTube video player" 
+                                        frameborder="0" 
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                                        allowfullscreen>
+                                </iframe>
+                            </div>
+                        </div>
+                        <div class="timestamp-nav" data-player="farcry" aria-label="Video timestamps">
                             <ul>
-                                <li><a href="#" data-time="184">AI Hurt</a></li>
-                                <li><a href="#" data-time="18">FPS Animations</a></li>
-                                <li><a href="#" data-time="52">Weapon Jamming</a></li>
-                                <li><a href="#" data-time="108">Deterioration</a></li>
-                                <li><a href="#" data-time="145">Health System</a></li>
-                                <li><a href="#" data-time="180">Vehicle Damage</a></li>
-                                <li><a href="#" data-time="240">Fire System</a></li>
+                                <li><a href="#" data-timestamp="183" data-end="425">AI Hurt</a></li>
+                                <li><a href="#" data-timestamp="425" data-end="519">Reload</a></li>
+                                <li><a href="#" data-timestamp="519" data-end="830">Vehicle AI</a></li>
+                                <li><a href="#" data-timestamp="830" data-end="930">Pickup Obj</a></li>
+                                <li><a href="#" data-timestamp="930" data-end="996">Map & Compass</a></li>
+                                <li><a href="#" data-timestamp="996" data-end="1060">Heal</a></li>
+                                <li><a href="#" data-timestamp="1060" data-end="1158">Weapon Malfunction</a></li>
+                                <li><a href="#" data-timestamp="1158" data-end="1200">Buddy Fix</a></li>
                             </ul>
                         </div>
                     </div>
@@ -340,29 +449,47 @@
                         <div class="project-role">Animation Technical Director</div>
                         <div class="project-period">2006 - 2008 • Ubisoft</div>
                         <div class="project-description">
-                            Advanced character animation systems for harsh African environment gameplay.
+                            More advanced than more recent Farcry 5.
                         </div>
                     </div>
                 </div>
 
                 <div class="project-card">
-                    <div class="video-container">
-                        <div class="video-placeholder">
-                            <h4>Dissect Tool</h4>
-                            <p>Recording and debugging system</p>
-                            <p><em>Add technical demonstration or UDC presentation</em></p>
+                    <div class="media-section">
+                        <div class="player-container">
+                            <div class="video-placeholder">
+                                <div class="custom-thumbnail" data-player="wd2">
+                                    <img src="./images/watchdogs2-thumbnail.jpg" alt="Watch Dogs 2 thumbnail">
+                                    <button class="play-button" aria-label="Play video">Play</button>
+                                </div>
+                                <iframe id="player-wd2"
+                                        src="https://www.youtube.com/embed/HTK-bVRzp5k?enablejsapi=1&playlist=HTK-bVRzp5k&vq=hd1080" 
+                                        title="YouTube video player" 
+                                        frameborder="0" 
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                                        allowfullscreen>
+                                </iframe>
+                            </div>
+                        </div>
+                        <div class="timestamp-nav" data-player="wd2" aria-label="Video timestamps">
+                            <ul>
+                                <li><a href="#" data-timestamp="0" data-end="60">Living City</a></li>
+                                <li><a href="#" data-timestamp="60" data-end="120">AI Behaviors</a></li>
+                                <li><a href="#" data-timestamp="120" data-end="180">Crowd Systems</a></li>
+                            </ul>
                         </div>
                     </div>
                     <div class="project-info">
-                        <h3>Dissect - Debug Tool</h3>
-                        <div class="project-role">Technical Director</div>
-                        <div class="project-period">Pipeline Tool • Ubisoft</div>
+                        <h3>Watch Dogs 2 Living City</h3>
+                        <div class="project-role">Animation Technical Director</div>
+                        <div class="project-period">2014 - 2016 • Ubisoft</div>
                         <div class="project-description">
-                            Recording/debugging tool used across all Ubisoft pipelines. Presented at UDC 2018 & 2015.
+                            Advanced AI and crowd systems for a living, breathing San Francisco.
                         </div>
                     </div>
                 </div>
 
+ 
             </div>
         </div>
     </section>
@@ -380,26 +507,24 @@
     <script>
         // Simple hover animations
         document.querySelectorAll('.project-card').forEach(card => {
-            card.addEventListener('mouseenter', function() {
+            const handleMouseEnter = function() {
                 this.style.transform = 'translateY(-10px)';
-            });
+            };
             
-            card.addEventListener('mouseleave', function() {
+            const handleMouseLeave = function() {
                 this.style.transform = 'translateY(0)';
+            };
+            
+            card.addEventListener('mouseenter', handleMouseEnter);
+            card.addEventListener('mouseleave', handleMouseLeave);
+            
+            // Cleanup on page unload
+            window.addEventListener('unload', () => {
+                card.removeEventListener('mouseenter', handleMouseEnter);
+                card.removeEventListener('mouseleave', handleMouseLeave);
             });
         });
 
-        // YouTube video timestamp seeking
-        document.querySelectorAll('.video-timestamps a').forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                const time = this.getAttribute('data-time');
-                const video = document.getElementById('farCry2Video');
-                if (video) {
-                    video.contentWindow.postMessage('{"event":"command","func":"seekTo","args":[' + time + ',true]}', '*');
-                }
-            });
-        });
     </script>
     <script>
         // Load YouTube API
@@ -408,24 +533,236 @@
         var firstScriptTag = document.getElementsByTagName('script')[0];
         firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-        var player;
+        // Add error handling for API loading
+        tag.onerror = function() {
+            console.error('Failed to load YouTube API');
+        };
+
+        var players = {};
+        var playbackStates = {};
+
         function onYouTubeIframeAPIReady() {
-            player = new YT.Player('farCry2Video', {
-                events: {
-                    'onReady': onPlayerReady
-                }
-            });
+            try {
+                // Initialize Far Cry 2 player
+                players.farcry = new YT.Player('player-farcry', {
+                    events: {
+                        'onReady': onPlayerReady,
+                        'onStateChange': onPlayerStateChange
+                    }
+                });
+
+                // Initialize Watch Dogs player
+                players.watchdogs = new YT.Player('player-watchdogs', {
+                    events: {
+                        'onReady': onPlayerReady,
+                        'onStateChange': onPlayerStateChange
+                    }
+                });
+
+                // Initialize Bionik player
+                players.bionik = new YT.Player('player-bionik', {
+                    events: {
+                        'onReady': onPlayerReady,
+                        'onStateChange': onPlayerStateChange
+                    }
+                });
+
+                // Initialize Watch Dogs 2 player
+                players.wd2 = new YT.Player('player-wd2', {
+                    events: {
+                        'onReady': onPlayerReady,
+                        'onStateChange': onPlayerStateChange
+                    }
+                });
+            } catch (error) {
+                console.error('Failed to initialize YouTube players:', error);
+            }
         }
 
         function onPlayerReady(event) {
-            // Add click handlers to timestamp links
-            document.querySelectorAll('.video-timestamps a').forEach(link => {
-                link.addEventListener('click', (e) => {
+            const playerId = event.target.getIframe().id.split('-')[1];
+            
+            if (!players[playerId]) {
+                console.error(`Player ${playerId} not initialized`);
+                return;
+            }
+            
+            document.querySelectorAll(`.timestamp-nav[data-player="${playerId}"] a`).forEach(link => {
+                link.addEventListener('click', async (e) => {
                     e.preventDefault();
-                    const time = parseInt(e.target.dataset.time);
-                    player.seekTo(time);
+                    e.stopPropagation();
+                    
+                    // Reset pause state when clicking timestamp
+                    playbackStates[playerId] = 'playing';
+                    
+                    const timestamps = Array.from(document.querySelectorAll(`.timestamp-nav[data-player="${playerId}"] a`));
+                    const currentIndex = timestamps.indexOf(e.target);
+                    
+                    // Clear any existing interval
+                    if (players[playerId].currentInterval) {
+                        clearInterval(players[playerId].currentInterval);
+                    }
+                    
+                    // Hide thumbnail if visible
+                    const thumbnail = document.querySelector(`.custom-thumbnail[data-player="${playerId}"]`);
+                    if (thumbnail && !thumbnail.classList.contains('hidden')) {
+                        thumbnail.classList.add('hidden');
+                        players[playerId].thumbnailHidden = true;
+                    }
+
+                    // Play sections sequentially starting from clicked timestamp
+                    for (let i = currentIndex; i < timestamps.length; i++) {
+                        const timestamp = timestamps[i];
+                        const startTime = parseInt(timestamp.dataset.timestamp);
+                        const endTime = parseInt(timestamp.dataset.end);
+                        
+                        if (isNaN(startTime) || isNaN(endTime)) continue;
+
+                        clearActiveTimestamps(playerId);
+                        timestamp.classList.add('active');
+                        
+                        players[playerId].seekTo(startTime);
+                        players[playerId].playVideo();
+
+                        await new Promise((resolve) => {
+                            // Update the Promise to check for pause state:
+                            const checkTime = setInterval(() => {
+                                if (playbackStates[playerId] === 'paused') {
+                                    clearInterval(checkTime);
+                                    resolve();
+                                    return;
+                                }
+                                
+                                const currentTime = players[playerId].getCurrentTime();
+                                if (currentTime >= endTime) {
+                                    clearInterval(checkTime);
+                                    timestamp.classList.remove('active');
+                                    resolve();
+                                }
+                            }, 1000);
+                            players[playerId].currentInterval = checkTime;
+                        });
+                    }
+                    
+                    // After last section, reset to initial state
+                    clearActiveTimestamps(playerId);
+                    players[playerId].pauseVideo();
+                    if (thumbnail && players[playerId].thumbnailHidden) {
+                        thumbnail.classList.remove('hidden');
+                        players[playerId].thumbnailHidden = false;
+                    }
                 });
             });
+        }
+
+        // Add helper function to clear active timestamps
+        function clearActiveTimestamps(playerId) {
+            document.querySelectorAll(`.timestamp-nav[data-player="${playerId}"] a`).forEach(link => {
+                link.classList.remove('active');
+            });
+        }
+
+        function handleThumbnailError(thumbnailElement) {
+            const playerId = thumbnailElement.dataset.player;
+            const videoId = players[playerId].getVideoData().video_id;
+            const imgElement = thumbnailElement.querySelector('img');
+            if (imgElement) {
+                imgElement.src = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+            }
+        }
+
+        document.querySelectorAll('.custom-thumbnail').forEach(thumbnail => {
+            const img = thumbnail.querySelector('img');
+            if (img) {
+                img.onerror = () => handleThumbnailError(thumbnail);
+            }
+        });
+
+        // Update the custom-thumbnail click handler:
+        document.querySelectorAll('.custom-thumbnail').forEach(thumbnail => {
+            thumbnail.addEventListener('click', async function() {
+                const playerId = this.dataset.player;
+                if (!players[playerId]) {
+                    console.error(`Player ${playerId} not initialized`);
+                    return;
+                }
+                
+                // Hide thumbnail
+                this.classList.add('hidden');
+                players[playerId].thumbnailHidden = true;
+
+                // Get all timestamps for this player
+                const timestamps = Array.from(document.querySelectorAll(`.timestamp-nav[data-player="${playerId}"] a`));
+                
+                // For Bionik video (no timestamps), just play the video
+                if (playerId === 'bionik' || timestamps.length === 0) {
+                    players[playerId].playVideo();
+                    return;
+                }
+
+                // For videos with timestamps
+                try {
+                    // Start from first timestamp
+                    const firstTimestamp = timestamps[0];
+                    const startTime = parseInt(firstTimestamp.dataset.timestamp);
+                    
+                    // Initial seek and play
+                    players[playerId].seekTo(startTime);
+                    players[playerId].playVideo();
+                    firstTimestamp.classList.add('active');
+
+                    // Play each section sequentially
+                    for (const timestamp of timestamps) {
+                        const start = parseInt(timestamp.dataset.timestamp);
+                        const end = parseInt(timestamp.dataset.end);
+                        
+                        if (isNaN(start) || isNaN(end)) continue;
+
+                        clearActiveTimestamps(playerId);
+                        timestamp.classList.add('active');
+
+                        await new Promise((resolve, reject) => {
+                            const checkTime = setInterval(() => {
+                                const currentTime = players[playerId].getCurrentTime();
+                                if (currentTime >= end) {
+                                    clearInterval(checkTime);
+                                    timestamp.classList.remove('active');
+                                    resolve();
+                                }
+                            }, 1000);
+                            players[playerId].currentInterval = checkTime;
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error playing video sections:', error);
+                    // Fallback to normal play if something goes wrong
+                    players[playerId].playVideo();
+                }
+            });
+        });
+
+        // Add this new function to handle player state changes:
+        function onPlayerStateChange(event) {
+            const playerId = event.target.getIframe().id.split('-')[1];
+            
+            if (event.data === YT.PlayerState.PAUSED) {
+                // User manually paused the video
+                playbackStates[playerId] = 'paused';
+                
+                // Clear any existing interval
+                if (players[playerId].currentInterval) {
+                    clearInterval(players[playerId].currentInterval);
+                    players[playerId].currentInterval = null;
+                }
+                
+                // Clear active timestamp
+                clearActiveTimestamps(playerId);
+            } else if (event.data === YT.PlayerState.PLAYING) {
+                // Only set to playing if it wasn't manually paused
+                if (playbackStates[playerId] !== 'paused') {
+                    playbackStates[playerId] = 'playing';
+                }
+            }
         }
     </script>
 </body>
